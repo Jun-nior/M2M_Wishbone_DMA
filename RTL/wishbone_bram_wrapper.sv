@@ -21,11 +21,10 @@ module bram_wishbone_wrapper #(
 );
 
     logic [BRAM_ADDR_WIDTH - 1 : 0] bram_addr;
-    logic                           bram_we;
     logic                           master_reg;
+    logic [DATA_WIDTH/8-1:0]        bram_we;
 
-
-    assign bram_we = wb_if.cyc && wb_if.stb && wb_if.we;
+    assign bram_we = { (DATA_WIDTH/8){wb_if.cyc && wb_if.stb && wb_if.we} } & wb_if.sel;
     assign bram_addr = wb_if.adr[BRAM_ADDR_WIDTH + 1 : 2];
 
     bram #(

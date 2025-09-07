@@ -78,7 +78,7 @@ module wishbone_master_agent #(
         wb_if.we    = i_we;
         wb_if.adr   = i_addr;
         wb_if.dat_w = i_wdata;
-        wb_if.sel   = 1; // Assume full data width transfer for simplicity
+        wb_if.sel   = 4'hF; // Assume full data width transfer for simplicity
     end
     
     // --- Data Capture Logic ---
