@@ -52,9 +52,9 @@ module wishbone_interconnect #(
     assign cpu_request = cpu_s_wb_if.cyc && cpu_s_wb_if.stb;
     assign dma_request = dma_s_wb_if.cyc && dma_s_wb_if.stb;
     
-    assign cpu_grant =  grant_lock ? 
-                        ((cpu_s_wb_if.we == 0 && (state == 2 || state == 3))
-                        || cpu_s_wb_if.we == 1 && (state == 4 || state == 5)) ? 0 : (cpu_request && !dma_grant) : cpu_request;
+    assign cpu_grant =  grant_lock ? // check this condition only when DMA is working and CPU wants to read/write from/to the BRAM, transaction to CSRs dont care this
+                        (((cpu_s_wb_if.adr >= S0_ADDR_BASE) && (cpu_s_wb_if.adr <= S0_ADDR_END) ) && ((cpu_s_wb_if.we == 0 && (state == 2 || state == 3))
+                        || cpu_s_wb_if.we == 1 && (state == 4 || state == 5))) ? 0 : (cpu_request && !dma_grant) : cpu_request;
     assign dma_grant =  grant_lock ? (dma_request && !cpu_grant) : (dma_request && !cpu_request);
 
     always_latch begin
