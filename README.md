@@ -28,6 +28,9 @@ This is the details of testbenches developed:
 | **No** |     **Test name**    |                  **Quick description**                 | 
 |:------:|:--------------------:|:------------------------------------------------------:|
 |    1   |    dma_csr_tb_top    |        Run some simple write/read in the RW CSRs       |
-|    2   |    dma_fsm_tb_top    |          Verify the DMA's core state machine           |
-|    3   | wishbone_master_agent_tb_top  |       |
-|    4   |    dma_system_tb_top    |              |
+|    2   |    dma_fsm_tb_top    |          Verify the DMA's core state machine and the interrupt signal           |
+|    3   | wishbone_master_agent_tb_top  |  Run some simple write/read from the DMA to the memory     |
+|    4   |    dma_system_tb_top    |     Two test scenarios with `LENGTH` of transfer varies         |
+
+In the `dma_system_tb_top`, both test scenarios check the parallel transactions driven by both the CPU and the DMA. After the CSRs register written done by the CPU, the DMA starts to do its job:
+- In the first scenario, while the DMA is doing its job, the CPU continuously checks the status of the DMA as well as sending its own `READ` transaction to read from the memory.
