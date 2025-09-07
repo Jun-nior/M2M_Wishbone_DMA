@@ -1,0 +1,50 @@
+# Specification file for the DMA Controller's register block
+- register_block:
+    name: DMA_CSR
+    byte_size: 32
+
+    registers:
+      # Register 0: Source Address
+      - name: SOURCE_ADDR_REG
+        offset_address: 0x00
+        comment: "Source Address for the DMA transfer."
+        bit_fields:
+          # type: rw => Read-Write access.
+          - { name: addr, bit_assignment: { width: 32 }, type: rw, initial_value: 0 }
+
+      # Register 1: Destination Address
+      - name: DEST_ADDR_REG
+        offset_address: 0x04
+        comment: "Destination Address for the DMA transfer."
+        bit_fields:
+          - { name: addr, bit_assignment: { width: 32 }, type: rw, initial_value: 0 }
+
+      # Register 2: Length
+      - name: LENGTH_REG
+        offset_address: 0x08
+        comment: "Transfer length in 32-bit words."
+        bit_fields:
+          - { name: len, bit_assignment: { width: 16 }, type: rw, initial_value: 0 }
+
+      # Register 3: Control
+      - name: CONTROL_REG
+        offset_address: 0x0C
+        comment: "Control register for the DMA."
+        bit_fields:
+          # type: rw => Read-Write. CPU set this bit to start the DMA. DMA clear this bit after started
+          - { name: go, bit_assignment: { lsb: 0 }, type: [custom, sw_write: default, hw_write : on ], initial_value: 0 }
+          
+          # type: rw => Read-Write. Used to enable/disable the interrupt.
+          - { name: ie, bit_assignment: { lsb: 1 }, type: rw, initial_value: 0 } # Interrupt Enable
+
+      # Register 4: Status
+      - name: STATUS_REG
+        offset_address: 0x10
+        comment: "Status register for the DMA."
+        bit_fields:
+          # type: ro => Read-Only. This bit is driven by hardware logic.
+          - { name: busy, bit_assignment: { lsb: 0 }, type: ro } 
+          
+          # type: w1c => Write-1-to-Clear. 
+          # Used for interrupt flags. The CPU writes a '1' to clear the flag after servicing an interrupt.
+          - { name: done_if, bit_assignment: { lsb: 16 }, type: w1c, initial_value: 0 } # Interrupt Flag
