@@ -18,3 +18,16 @@ A simple System-on-Chip (SoC) featuring a Memory-to-Memory (M2M) DMA controller 
 
 ## <a name="test"></a> Run tests
 
+This repository contains various tests for submodules and the system (UVM Test for this project will be updated in the future). To run all the tests and generate the waveforms, run the command:
+```bash
+make run_no_uvm TEST_MODULE=<module_test>
+```
+
+This is the details of testbenches developed:
+
+| **No** |     **Test name**    |                  **Quick description**                 | 
+|:------:|:--------------------:|:------------------------------------------------------:|
+|    1   |    dma_csr_tb_top    |        Run some simple write/read in the RW CSRs       |
+|    2   |    dma_fsm_tb_top    |          Verify the DMA's core state machine           |
+|    3   | wishbone_master_agent_tb_top  |       |
+|    4   |    dma_system_tb_top    |              |
