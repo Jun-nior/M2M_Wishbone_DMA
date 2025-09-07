@@ -1,1 +1,1 @@
-# DMA_Controller
+# Memory-to-Memory System with DMA and Multi-master Wishbone Interconnect
