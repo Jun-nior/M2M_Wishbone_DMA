@@ -39,3 +39,10 @@ In the `dma_system_tb_top`, both test scenarios check the parallel transactions 
 ## <a name="Architecture"></a> Architecture
 
 ![rtl_arch](System.png)
+
+After the CPU set all the necessary CSRs in the [`DMA CSR`](out/DMA_CSR.sv) and trigger the bit `go`, which tells the [`DMA_FSM`](RTL/dma_fsm.sv) to begin alternatively transfer between `READ` and `WRITE` transaction (through [`WISHBONE_MASTER_AGENT`](RTL/wishbone_master_agent.sv)) to the 64KB [`WISHBONE_BRAM`](RTL/wishbone_bram_wrapper.sv). Each of this transaction will be passed through the [`WISHBONE_INTERCONNECT`](RTL/wishbone_interconnect.sv) and wait for response from the memory return to the interconnect. After successfully copying all data starting from `SRC_ADDR` to `DEST_ADDR`, the `done_if` bit in offset `10` in the CSRs will be triggered.
+
+The [`WISHBONE_INTERCONNECT`](RTL/wishbone_interconnect.sv) is responsible for transfer the transaction from either CPU or DMA to CSRs or memory and return the corresponding response to the transaction's master. Although I have mentioned earlier that this interconnect supports a fixed-priority arbiter, since there is only one slave channel at the memory, if the `DMA_FSM` is in the state waiting responses for a previous `READ`/`WRITE` transaction, the CPU will have to wait after the response success before being granted an interconnect use to ensure data coherency (CPU does not need to wait if the transaction is to CSRs, only transactions to memory require this wait behavior).
+
+## <a name="csrs"></a> CSRs - Control & Status Registers
+For more details on the CSRs, please read the generated file at [CSR list](out/DMA_CSR.md). 
