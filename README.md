@@ -33,4 +33,5 @@ This is the details of testbenches developed:
 |    4   |    dma_system_tb_top    |     Two test scenarios with `LENGTH` of transfer varies         |
 
 In the `dma_system_tb_top`, both test scenarios check the parallel transactions driven by both the CPU and the DMA. After the CSRs register written done by the CPU, the DMA starts to do its job:
-- In the first scenario, while the DMA is doing its job, the CPU continuously checks the status of the DMA as well as sending its own `READ` transaction to read from the memory.
+- In the first scenario, while the DMA is doing its job, the CPU continuously checks the status of the DMA (through CSRs ``busy`` bit - see [CSRs](#csrs)), as well as sending its own `READ` transaction to read from the memory.
+- In the second scenario, the CPU enable the interrupt mode and continuously sends a `READ` transaction until the interrupt is asserted by the DMA.
